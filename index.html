@@ -1,225 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="NOVA Digital Agency builds modern websites and digital experiences for businesses.">
-    <title>NOVA | Digital Agency</title>
-
-    <link rel="stylesheet" href="s.css">
-    <script src="st.js" defer></script>
+<meta charset="utf-8">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13.5 2 5 13.5h6L9.5 22 19 9.5h-6.2z' fill='%237c4dff'/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Violet Fast — Typing Practice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f8fb; --surface:#ffffff; --ink:#1b2333; --mute:#9aa4b5; --line:#e3e8f0;
+  --accent:#3b5bff; --good:#1b2333; --bad:#e5484d; --badbg:#fde8e9;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#0f131b;--surface:#171c27;--ink:#e8ecf4;--mute:#5d6778;--line:#242b39;--accent:#7b8cff;--good:#e8ecf4;--bad:#ff6b70;--badbg:#3a1d21}
+}
+:root[data-theme="dark"]{--bg:#0f131b;--surface:#171c27;--ink:#e8ecf4;--mute:#5d6778;--line:#242b39;--accent:#7b8cff;--good:#e8ecf4;--bad:#ff6b70;--badbg:#3a1d21}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,sans-serif;display:flex;flex-direction:column;align-items:center}
+header{width:100%;max-width:860px;display:flex;justify-content:space-between;align-items:center;padding:28px 24px 0}
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:1.4rem;letter-spacing:-.02em}
+.logo span{background:linear-gradient(90deg,#7c4dff,#b794ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+@keyframes blink{50%{opacity:0}}
+.tag{margin:4px 0 0;font-size:.8rem;font-weight:600;color:var(--mute)}
+.theme{background:none;border:1px solid var(--line);color:var(--mute);border-radius:10px;padding:7px 12px;font:600 .85rem Manrope,sans-serif;cursor:pointer}
+.theme:hover{color:var(--ink)}
+main{width:100%;max-width:860px;padding:0 24px;flex:1;display:flex;flex-direction:column;justify-content:center;gap:28px;margin-bottom:8vh}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.modes{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);padding:4px;border-radius:12px}
+.modes button{border:0;background:none;color:var(--mute);font:600 .9rem Manrope,sans-serif;padding:8px 16px;border-radius:9px;cursor:pointer}
+.modes button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.modes button:hover:not([aria-pressed="true"]){color:var(--ink)}
+.live{display:flex;gap:28px;font-weight:600;color:var(--mute);font-size:.95rem}
+.live b{color:var(--ink);font-size:1.5rem;font-weight:800;margin-left:6px;font-variant-numeric:tabular-nums}
+.stage{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:28px 32px;cursor:text}
+.view{height:calc(1.9em * 3);overflow:hidden;font:400 1.6rem/1.9 "JetBrains Mono",ui-monospace,monospace;position:relative}
+.words{transition:transform .15s ease;word-break:keep-all;position:relative}
+.words span{color:var(--mute);position:relative}
+.words span.ok{color:var(--good)}
+.words span.no{color:var(--bad);background:var(--badbg);border-radius:3px}
+.words span.cur::before{content:"";position:absolute;left:-1px;top:.18em;bottom:.18em;width:2px;background:var(--accent);border-radius:2px;animation:blink 1s steps(1) infinite}
+.stage.run .words span.cur::before{animation:none}
+.hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--surface) 80%,transparent);backdrop-filter:blur(3px);border-radius:20px;color:var(--mute);font-weight:600;transition:opacity .2s}
+.stage.focus .hint,.stage.run .hint{opacity:0;pointer-events:none}
+.foot{color:var(--mute);font-size:.9rem;text-align:center}
+kbd{font:500 .8rem "JetBrains Mono",monospace;border:1px solid var(--line);border-radius:6px;padding:2px 7px;background:var(--surface)}
+.result{display:none;flex-direction:column;align-items:center;gap:24px;text-align:center}
+.result.show{display:flex}
+.big{font-size:clamp(4rem,14vw,7rem);font-weight:800;letter-spacing:-.04em;line-height:1}
+.big small{font-size:1.1rem;color:var(--mute);font-weight:600;letter-spacing:0;margin-left:8px}
+.stats{display:flex;gap:40px;flex-wrap:wrap;justify-content:center}
+.stats div{display:flex;flex-direction:column;gap:2px;color:var(--mute);font-weight:600;font-size:.9rem}
+.stats strong{color:var(--ink);font-size:1.6rem;font-weight:800}
+.again{background:var(--accent);color:#fff;border:0;border-radius:12px;padding:12px 26px;font:700 1rem Manrope,sans-serif;cursor:pointer}
+.again:hover{filter:brightness(1.08)}
+.cert{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.cert input,.pin{font:600 .95rem Manrope,sans-serif;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);width:260px;max-width:100%}
+.cert input:focus-visible{outline:2px solid var(--accent)}
+.dl{background:var(--surface);color:var(--accent);border:1px solid var(--accent);border-radius:12px;padding:12px 20px;font:700 .95rem Manrope,sans-serif;cursor:pointer}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.panel{display:flex;flex-direction:column;gap:18px}
+.ph{margin:0;font-size:1.3rem;font-weight:800}
+.tw{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line)}
+th{color:var(--mute);font-weight:600;position:sticky;top:0;background:var(--surface)}
+.vf{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+textarea{width:100%;font:500 .9rem "JetBrains Mono",monospace;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+#vr{font-weight:600}
+dialog{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:24px;width:min(420px,92vw)}
+dialog::backdrop{background:#0009}
+dialog[open]{display:flex;flex-direction:column;gap:12px}
+dialog .pin{width:100%}
+#aform,.phone{display:flex;flex-direction:column;gap:10px}
+.ah{display:flex;justify-content:space-between;align-items:center}
+.soc{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px;font:700 .95rem Manrope,sans-serif;cursor:pointer}
+.soc{display:flex;align-items:center;justify-content:center;gap:10px}
+.soc:hover{border-color:var(--accent)}
+.hide{display:none!important}
+#cap{position:fixed;opacity:0;pointer-events:none;left:0;top:0;width:1px;height:1px}
+@media (max-width:560px){.view{font-size:1.2rem}.stage{padding:20px}.live{gap:18px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
 </head>
 <body>
+<header>
+  <div><div class="logo"><svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M13.5 2 5 13.5h6L9.5 22 19 9.5h-6.2z" fill="#7c4dff"/></svg><span>Violet Fast</span></div><p class="tag">A little practice. A lot more speed.</p></div>
+  <div style="display:flex;gap:8px"><span id="who" class="foot"></span><button class="theme" id="abtn">Sign in</button><button class="theme" id="hbtn">History</button><button class="theme" id="theme" aria-label="Toggle theme">Theme</button></div>
+</header>
 
-    <!-- Navigation -->
-    <header class="navbar">
-        <a href="#home" class="logo">NOVA<span>.</span></a>
+<main>
+  <section id="game">
+    <div class="modes" id="kinds" role="group" aria-label="Test type" style="margin-bottom:16px;flex-wrap:wrap;width:fit-content"><button data-k="words" aria-pressed="true">Words</button><button data-k="sentences" aria-pressed="false">Sentences</button><button data-k="punctuation" aria-pressed="false">Punctuation</button><button data-k="numbers" aria-pressed="false">Numbers</button></div>
+    <div class="bar">
+      <div class="modes" id="modes" role="group" aria-label="Test length">
+        <button data-t="15" aria-pressed="false">15s</button>
+        <button data-t="30" aria-pressed="false">30s</button>
+        <button data-t="60" aria-pressed="true">60s</button>
+        <button data-t="120" aria-pressed="false">120s</button>
+      </div>
+      <div class="live"><span>Time<b id="time">60</b></span><span>WPM<b id="wpm">0</b></span></div>
+    </div>
+    <div class="stage" id="stage" style="margin-top:28px">
+      <div class="view" id="view"><div class="words" id="words"></div></div>
+      <div class="hint">Click here or just start typing</div>
+    </div>
+    <p class="foot" style="margin-top:24px"><kbd>Tab</kbd> restart anytime</p>
+  </section>
 
-        <button class="menu-toggle"
-                id="menuToggle"
-                aria-label="Open navigation"
-                aria-expanded="false"
-                aria-controls="navLinks">
-            ☰
-        </button>
+  <section class="panel hide" id="hp">
+    <div class="bar"><h2 class="ph">Your results</h2><button class="theme" id="hback">Back to typing</button></div>
+    <div class="vf"><h3 class="ph">Profile</h3><input class="pin" id="pn" type="text" maxlength="30" placeholder="Your name" aria-label="Your name"></div>
+    <div class="stats" id="hs"></div>
+    <div class="tw"><table id="ht"></table></div>
+    <button class="theme" id="hclr" style="align-self:flex-start">Clear history</button>
+    <div class="vf"><h3 class="ph">Verify a certificate</h3><p class="foot" style="margin:0">Scan the QR code on a certificate, then paste the text you see here.</p><textarea id="vi" rows="3" aria-label="Certificate code"></textarea><button class="dl" id="vb">Verify</button><div id="vr"></div></div>
+  </section>
 
-        <nav class="nav-links" id="navLinks">
-            <a href="#home">Home</a>
-            <a href="#services">Services</a>
-            <a href="#about">About</a>
-            <a href="#contact" class="nav-cta">Let's Talk ↗</a>
-        </nav>
-    </header>
+  <section class="result" id="result" aria-live="polite">
+    <div class="big"><span id="rWpm">0</span><small>words per minute</small></div>
+    <div class="stats">
+      <div>Time<strong id="rTime">0s</strong></div>
+      <div>Accuracy<strong id="rAcc">0%</strong></div>
+      <div>Characters<strong id="rChars">0</strong></div>
+      <div>Mistakes<strong id="rErr">0</strong></div>
+    </div>
+    <div class="cert"><input id="nm" type="text" maxlength="30" placeholder="Your name for the certificate" aria-label="Your name"><button class="dl" id="dl">Download certificate</button></div>
+    <button class="again" id="again">Try again</button>
+  </section>
+</main>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="hero section" id="home">
-            <div class="glow glow-one"></div>
-            <div class="glow glow-two"></div>
+<input id="cap" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Typing input">
 
-            <div class="hero-content reveal">
-                <p class="eyebrow">
-                    <span class="status-dot"></span>
-                    CREATIVE DIGITAL AGENCY
-                </p>
+<script>
+const WORDS="the of and to in is you that it he was for on are as with his they at be this from have or by one had not but what all were when we there can an your which their said if do will each about how up out them then she many some so these would other into has more her two like him see time could no make than first been its who now people my made over did down only way find use may water long little very after words called just where most know get through back much before go good new write our used me man too any day same right look think also around another came come work three word must because does part even place well such here take why things help put years different away again off went old number great tell men say small every found still between name should home big give air line set own under read last never us left end along while might next sound below saw something thought both few those always looked show large often together asked house don't world going want school important until form food keep children feet land side without boy once animals life enough took sometimes four head above kind began almost live page got earth need far hand high year mother light country father let night picture being study second soon story since white ever paper hard near sentence better best across during today however sure knew try told young sun thing whole hear example heard several change answer room sea against top turned learn point city play toward five using himself usually".split(" ");
 
-                <h1>
-                    We build digital
-                    <span class="gradient-text">experiences.</span>
-                </h1>
+const $=id=>document.getElementById(id);
+const stage=$('stage'),wordsEl=$('words'),cap=$('cap');
+let dur=60,kind="words",last={},text="",spans=[],pos=0,started=false,startT=0,tick=null,done=false,keys=0,hits=0,errs=0,line0=0;
 
-                <p class="hero-description">
-                    We help ambitious businesses grow with modern websites,
-                    thoughtful design and powerful digital solutions.
-                </p>
+function rnd(n){let o=[],last="";for(let i=0;i<n;i++){let w;do{w=WORDS[Math.floor(Math.random()*WORDS.length)]}while(w===last);o.push(w);last=w}return o.join(" ")}
 
-                <div class="hero-actions">
-                    <a href="#contact" class="btn btn-primary">
-                        Start a Project <span>↗</span>
-                    </a>
+const SENT=["The quick brown fox jumps over the lazy dog.","Practice every day and your speed will grow.","A good habit is built one small step at a time.","Typing without looking at the keys is a useful skill.","Computers help us learn, work and share ideas.","The best way to learn is to keep trying.","Fast hands come from a calm and focused mind.","Rain fell softly on the quiet town last night.","Every expert was once a beginner.","Read a little, write a little, and learn a lot.","Accuracy first, then speed will follow naturally.","Good things come to those who work hard."];
+function gen(){
+  if(kind==="sentences"){let o=[],l=-1,n=0;while(n<2600){let i;do{i=Math.floor(Math.random()*SENT.length)}while(i===l);l=i;o.push(SENT[i]);n+=SENT[i].length+1}return o.join(" ")}
+  if(kind==="numbers")return Array.from({length:500},()=>Math.floor(Math.random()*10**(1+Math.floor(Math.random()*5)))).join(" ");
+  const w=rnd(400).split(" ");
+  if(kind==="punctuation"){let cap=true;return w.map(x=>{if(cap){x=x[0].toUpperCase()+x.slice(1);cap=false}const r=Math.random();if(r<.1){x+=".";cap=true}else if(r<.2)x+=",";else if(r<.23){x+="?";cap=true}return x}).join(" ")}
+  return w.join(" ");
+}
+function setup(){
+  clearInterval(tick);
+  started=false;done=false;pos=0;keys=0;hits=0;errs=0;line0=0;
+  text=gen();
+  wordsEl.innerHTML="";wordsEl.style.transform="";
+  spans=[...text].map(c=>{const s=document.createElement('span');s.textContent=c;wordsEl.appendChild(s);return s});
+  spans[0].className="cur";
+  $('time').textContent=dur;$('wpm').textContent=0;
+  stage.classList.remove('run');
+  $('result').classList.remove('show');$('game').classList.remove('hide');
+  cap.value="\u200b";
+  cap.focus({preventScroll:true});
+}
 
-                    <a href="#services" class="btn btn-secondary">
-                        Explore Services
-                    </a>
-                </div>
+function liveWpm(){
+  const m=(Date.now()-startT)/60000;
+  return m>0?Math.round(hits/5/m):0;
+}
 
-                <div class="hero-stats">
-                    <div>
-                        <h3>Design</h3>
-                        <p>Made with purpose</p>
-                    </div>
-                    <div>
-                        <h3>Develop</h3>
-                        <p>Built for people</p>
-                    </div>
-                    <div>
-                        <h3>Grow</h3>
-                        <p>Ready for tomorrow</p>
-                    </div>
-                </div>
-            </div>
+function begin(){
+  started=true;startT=Date.now();stage.classList.add('run');
+  tick=setInterval(()=>{
+    const left=Math.max(0,dur-Math.round((Date.now()-startT)/1000));
+    $('time').textContent=left;$('wpm').textContent=liveWpm();
+    if(left<=0)finish();
+  },250);
+}
 
-            <div class="hero-visual reveal">
-                <div class="orbit orbit-one"></div>
-                <div class="orbit orbit-two"></div>
+function finish(){
+  if(done)return;done=true;clearInterval(tick);
+  const m=Math.max((Date.now()-startT)/60000,1/60);
+  last={w:Math.round(hits/5/m),a:keys?Math.round(hits/keys*100):0};
+  $('dl').textContent='Download certificate';
+  saveH(loadH().concat({t:Date.now(),w:last.w,a:last.a,d:dur,k:kind}));
+  $('rWpm').textContent=last.w;
+  $('rAcc').textContent=(keys?Math.round(hits/keys*100):0)+'%';
+  $('rChars').textContent=hits;
+  $('rErr').textContent=errs;
+  $('rTime').textContent=Math.min(dur,Math.round((Date.now()-startT)/1000))+'s';
+  $('game').classList.add('hide');
+  $('result').classList.add('show');
+  cap.blur();
+}
 
-                <div class="visual-card">
-                    <div class="card-top">
-                        <span class="mini-logo">N.</span>
-                        <span class="live-label">
-                            <span class="status-dot"></span> LIVE IDEAS
-                        </span>
-                    </div>
+function type(ch){
+  if(done||pos>=spans.length)return;
+  if(!started)begin();
+  keys++;
+  const ok=ch===text[pos];
+  if(ok)hits++;else errs++;
+  spans[pos].className=ok?"ok":"no";
+  pos++;
+  spans[pos]&&(spans[pos].className="cur");
+  scroll();
+  if(pos>=spans.length)finish();
+}
 
-                    <div class="visual-circle">
-                        <span>NOVA</span>
-                    </div>
+function back(){
+  if(done||pos===0)return;
+  spans[pos].className="";
+  pos--;
+  if(spans[pos].className==="ok")hits--;
+  spans[pos].className="cur";
+  scroll();
+}
 
-                    <p class="visual-caption">Turning ideas into impact.</p>
+function scroll(){
+  const lh=parseFloat(getComputedStyle($('view')).lineHeight);
+  const row=Math.round(spans[Math.min(pos,spans.length-1)].offsetTop/lh);
+  if(row>1)wordsEl.style.transform=`translateY(${-(row-1)*lh}px)`;
+  else wordsEl.style.transform="";
+}
 
-                    <div class="visual-bars">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
+function backWord(){
+  while(pos>0&&text[pos-1]===' ')back();
+  while(pos>0&&text[pos-1]!==' ')back();
+}
+cap.addEventListener('input',e=>{
+  if(e.inputType==='deleteContentBackward')back();
+  else if(e.data)for(const c of e.data)type(c);
+  cap.value="\u200b";
+});
+document.addEventListener('keydown',e=>{
+  if(done)return;
+  if(e.key==='Tab'){e.preventDefault();setup();return}
+  if(e.key==='Backspace'&&!done){e.preventDefault();(e.ctrlKey||e.altKey)?backWord():back();return}
+  if(e.target!==cap&&!done&&!e.ctrlKey&&!e.metaKey)cap.focus({preventScroll:true});
+});
+stage.addEventListener('click',()=>cap.focus({preventScroll:true}));
+cap.addEventListener('focus',()=>stage.classList.add('focus'));
+cap.addEventListener('blur',()=>stage.classList.remove('focus'));
 
-                <div class="floating-tag tag-top">✦ Creative</div>
-                <div class="floating-tag tag-bottom">↗ Innovative</div>
-            </div>
-        </section>
+$('modes').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  dur=+b.dataset.t;
+  [...$('modes').children].forEach(x=>x.setAttribute('aria-pressed',x===b));
+  setup();
+});
+$('again').addEventListener('click',setup);
+$('kinds').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b)return;
+  kind=b.dataset.k;
+  [...$('kinds').children].forEach(x=>x.setAttribute('aria-pressed',x===b));
+  setup();
+});
+const SALT='vf-violet-2026';
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function h(s){let x=2166136261;for(const c of s+SALT){x^=c.charCodeAt(0);x=Math.imul(x,16777619)}return (x>>>0).toString(36).toUpperCase()}
+function pack(r){const p=[r.n,r.w,r.a,r.d,r.k,r.t].join('|');return btoa(unescape(encodeURIComponent(p)))+'.'+h(p)}
+function unpack(code){try{const [b,c]=code.split('.');const p=decodeURIComponent(escape(atob(b)));if(!c||h(p)!==c)return null;const [n,w,a,d,k,t]=p.split('|');return{n,w,a,d,k,t}}catch(e){return null}}
+let HK='vf-hist';
+function loadH(){try{return JSON.parse(localStorage.getItem(HK)||'[]')}catch(e){return[]}}
+function saveH(a){try{localStorage.setItem(HK,JSON.stringify(a.slice(-200)))}catch(e){}}
+function renderH(){
+  const a=loadH().slice().reverse();
+  const best=a.reduce((m,x)=>Math.max(m,x.w),0),avg=a.length?Math.round(a.reduce((s,x)=>s+x.w,0)/a.length):0;
+  $('hs').innerHTML=`<div>Tests<strong>${a.length}</strong></div><div>Best WPM<strong>${best}</strong></div><div>Average WPM<strong>${avg}</strong></div>`;
+  $('ht').innerHTML='<tr><th>Date</th><th>Mode</th><th>Time</th><th>WPM</th><th>Accuracy</th></tr>'+(a.map(x=>`<tr><td>${new Date(x.t).toLocaleString([],{dateStyle:'medium',timeStyle:'short'})}</td><td>${esc(x.k)}</td><td>${x.d}s</td><td>${x.w}</td><td>${x.a}%</td></tr>`).join('')||'<tr><td colspan="5">No tests yet. Finish a test and it will show up here.</td></tr>');
+}
+$('hbtn').addEventListener('click',()=>{done=true;clearInterval(tick);stage.classList.remove('run');$('game').classList.add('hide');$('result').classList.remove('show');$('hp').classList.remove('hide');renderH()});
+$('hback').addEventListener('click',()=>{$('hp').classList.add('hide');setup()});
+$('hclr').addEventListener('click',e=>{const b=e.target;if(b.dataset.s){saveH([]);renderH();delete b.dataset.s;b.textContent='Clear history'}else{b.dataset.s=1;b.textContent='Click again to confirm'}});
+$('vb').addEventListener('click',()=>{
+  const r=unpack($('vi').value.trim().split(/\s+/).pop()||'');
+  $('vr').innerHTML=r?`<span style="color:#1f9d55">Valid certificate</span><br>${esc(r.n)} · ${esc(r.w)} WPM · ${esc(r.a)}% accuracy · ${esc(r.d)}s ${esc(r.k)} · ${esc(r.t)}`:'<span style="color:var(--bad)">Not valid. The code is missing or has been changed.</span>';
+});
+function getName(){try{return localStorage.getItem('vf-name')||''}catch(e){return''}}
+function setName(v){try{localStorage.setItem('vf-name',v.trim())}catch(e){}$('nm').value=v;$('pn').value=v}
+setName(getName());
+$('pn').addEventListener('input',e=>{try{localStorage.setItem('vf-name',e.target.value.trim())}catch(_){}$('nm').value=e.target.value});
+$('nm').addEventListener('input',e=>{try{localStorage.setItem('vf-name',e.target.value.trim())}catch(_){}$('pn').value=e.target.value});
+function makeCert(){
+  const name=$('nm').value.trim()||'Typing Champion';
+  const rec={n:name.replace(/\|/g,' '),w:last.w,a:last.a,d:dur,k:kind,t:new Date().toISOString().slice(0,10)};
+  const code=pack(rec);
+  const c=document.createElement('canvas');c.width=1600;c.height=1130;
+  const g=c.getContext('2d'),F='Manrope,system-ui,sans-serif';
+  g.fillStyle='#fbfaff';g.fillRect(0,0,1600,1130);
+  g.strokeStyle='#7c4dff';g.lineWidth=14;g.strokeRect(40,40,1520,1050);
+  g.strokeStyle='#b794ff';g.lineWidth=3;g.strokeRect(70,70,1460,990);
+  g.save();g.translate(620,140);g.scale(3.4,3.4);g.fillStyle='#7c4dff';g.fill(new Path2D('M13.5 2 5 13.5h6L9.5 22 19 9.5h-6.2z'));g.restore();
+  g.textAlign='left';g.fillStyle='#7c4dff';g.font='800 64px '+F;g.fillText('Violet Fast',715,215);
+  g.textAlign='center';
+  g.fillStyle='#1b2333';g.font='800 80px '+F;g.fillText('Certificate of Achievement',800,380);
+  g.fillStyle='#6b7487';g.font='600 34px '+F;g.fillText('This certifies that',800,460);
+  g.fillStyle='#1b2333';g.font='800 96px '+F;g.fillText(name,800,580);
+  g.fillStyle='#7c4dff';g.fillRect(450,610,700,5);
+  g.fillStyle='#6b7487';g.font='600 34px '+F;g.fillText('completed a '+dur+'-second '+kind+' typing test with a speed of',800,690);
+  g.fillStyle='#7c4dff';g.font='800 150px '+F;g.fillText(last.w+' WPM',800,850);
+  g.fillStyle='#1b2333';g.font='700 40px '+F;g.fillText(last.a+'% accuracy',800,925);
+  g.fillStyle='#6b7487';g.font='600 28px '+F;g.fillText(new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'}),800,1010);
+  if(window.qrcode){
+    if(qrcode.stringToBytesFuncs)qrcode.stringToBytes=qrcode.stringToBytesFuncs['UTF-8'];
+    const q=qrcode(0,'M');q.addData('Violet Fast certificate\nVerify code:\n'+code);q.make();
+    const n=q.getModuleCount(),m=Math.floor(230/n),s=m*n,ox=1250,oy=775;
+    g.fillStyle='#fff';g.fillRect(ox-12,oy-12,s+24,s+24);
+    g.fillStyle='#1b2333';
+    for(let r=0;r<n;r++)for(let k=0;k<n;k++)if(q.isDark(r,k))g.fillRect(ox+k*m,oy+r*m,m,m);
+    g.fillStyle='#6b7487';g.font='600 22px '+F;g.fillText('Scan to verify',ox+s/2,oy+s+34);
+  }
+  return new Promise(r=>c.toBlob(r,'image/png'));
+}
+$('dl').addEventListener('click',async()=>{
+  const b=$('dl');
+  try{
+    const blob=await makeCert();
+    const d=window.claude&&await claude.use('downloads');
+    if(d){await d.save({filename:'violet-fast-certificate.png',data:blob})}
+    else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='violet-fast-certificate.png';a.click()}
+    b.textContent='Certificate saved';
+  }catch(e){if(!e||e.code!=='declined')b.textContent='Could not save, try again'}
+});
+$('theme').addEventListener('click',()=>{
+  const r=document.documentElement;
+  const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;
+  r.dataset.theme=dark?'light':'dark';
+});
+document.fonts&&document.fonts.ready.then(()=>{if(!started)setup()});
+setup();
+</script>
+<dialog id="authDlg">
+  <div class="ah"><h2 class="ph">Welcome to Violet Fast</h2><button class="theme" id="aclose" type="button">Close</button></div>
+  <div class="modes" style="width:fit-content"><button id="tin" type="button" aria-pressed="true">Sign in</button><button id="tup" type="button" aria-pressed="false">Sign up</button></div>
+  <button class="soc" id="agg" type="button"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continue with Google</span></button>
+  <button class="soc" id="afb" type="button"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#1877F2"/><path fill="#fff" d="M16.67 15.47 17.2 12h-3.33V9.75c0-.95.47-1.88 1.96-1.88h1.51V4.92s-1.37-.23-2.68-.23c-2.74 0-4.53 1.66-4.53 4.67V12H7.1v3.47h3.03V24h3.74v-8.53z"/></svg><span>Continue with Facebook</span></button>
+  <form id="aform">
+    <input class="pin" id="anm" type="text" placeholder="Your name" style="display:none">
+    <input class="pin" id="aem" type="email" placeholder="Email" required>
+    <input class="pin" id="apw" type="password" placeholder="Password (6+ characters)" minlength="6" required>
+    <button class="again" id="asub">Sign in</button>
+  </form>
+  <div class="phone">
+    <input class="pin" id="aph" type="tel" placeholder="Phone with country code, e.g. +919876543210">
+    <button class="soc" id="asend" type="button">Send code by SMS</button>
+    <div id="acodebox" style="display:none;flex-direction:column;gap:10px"><input class="pin" id="acode" type="text" inputmode="numeric" placeholder="6-digit code"><button class="soc" id="averify" type="button">Verify code</button></div>
+  </div>
+  <p id="amsg" class="foot" role="status"></p>
+</dialog>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,onAuthStateChanged,signOut,GoogleAuthProvider,FacebookAuthProvider,signInWithPopup,createUserWithEmailAndPassword,signInWithEmailAndPassword,updateProfile,RecaptchaVerifier,signInWithPhoneNumber} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        <!-- Services -->
-        <section class="section services" id="services">
-            <div class="section-heading reveal">
-                <p class="eyebrow">WHAT WE DO</p>
-                <h2>Solutions built for <span class="gradient-text">growth.</span></h2>
-                <p>Everything your business needs to stand out online.</p>
-            </div>
+// 1) Paste your own Firebase project settings here (Firebase console > Project settings > Your apps > Web app)
+const firebaseConfig={apiKey:"AIzaSyCRxd6n5UHnCLEP123OnPdvrlOOUCr4m-A",authDomain:"violet-fast.firebaseapp.com",projectId:"violet-fast",appId:"1:588734930789:web:022934fa0446e7617f8b8c"};
 
-            <div class="service-grid">
-                <article class="service-card reveal">
-                    <div class="service-icon">⌘</div>
-                    <h3>Web Development</h3>
-                    <p>Fast, responsive and reliable websites built around your goals.</p>
-                    <a href="#contact">Explore service ↗</a>
-                </article>
+const auth=getAuth(initializeApp(firebaseConfig));
+const dlg=$('authDlg'),msg=$('amsg');
+let mode='in',conf=null,rv=null;
+const say=(t,bad=true)=>{msg.textContent=t;msg.style.color=bad?'var(--bad)':'#1f9d55'};
+const fail=e=>say(((e&&e.code)||'').replace('auth/','').replace(/-/g,' ')||'Something went wrong. Try again.');
 
-                <article class="service-card reveal">
-                    <div class="service-icon">✳</div>
-                    <h3>UI/UX Design</h3>
-                    <p>Clean, intuitive interfaces that make every interaction count.</p>
-                    <a href="#contact">Explore service ↗</a>
-                </article>
+function setMode(m){
+  mode=m;
+  $('tin').setAttribute('aria-pressed',m==='in');$('tup').setAttribute('aria-pressed',m==='up');
+  $('anm').style.display=m==='up'?'':'none';
+  $('asub').textContent=m==='up'?'Create account':'Sign in';
+  say('',false);
+}
+$('tin').onclick=()=>setMode('in');
+$('tup').onclick=()=>setMode('up');
+$('abtn').onclick=()=>{auth.currentUser?signOut(auth):dlg.showModal()};
+$('aclose').onclick=()=>dlg.close();
 
-                <article class="service-card reveal">
-                    <div class="service-icon">↗</div>
-                    <h3>Digital Growth</h3>
-                    <p>Smart digital experiences that help your brand reach more people.</p>
-                    <a href="#contact">Explore service ↗</a>
-                </article>
-            </div>
-        </section>
+$('aform').onsubmit=async e=>{
+  e.preventDefault();
+  try{
+    const em=$('aem').value.trim(),pw=$('apw').value;
+    if(mode==='up'){
+      const c=await createUserWithEmailAndPassword(auth,em,pw);
+      const n=$('anm').value.trim();
+      if(n){await updateProfile(c.user,{displayName:n});$('nm').value=n}
+    }else await signInWithEmailAndPassword(auth,em,pw);
+    dlg.close();
+  }catch(x){fail(x)}
+};
 
-        <!-- About -->
-        <section class="section about" id="about">
-            <div class="about-visual reveal">
-                <div class="about-orb"></div>
-                <div class="about-note">
-                    <span>OUR APPROACH</span>
-                    <strong>Think boldly.<br>Build thoughtfully.</strong>
-                </div>
-            </div>
+async function popup(p){try{await signInWithPopup(auth,p);dlg.close()}catch(x){fail(x)}}
+$('agg').onclick=()=>popup(new GoogleAuthProvider());
+$('afb').onclick=()=>popup(new FacebookAuthProvider());
 
-            <div class="about-content reveal">
-                <p class="eyebrow">ABOUT NOVA</p>
-                <h2>Good design is just the <span class="gradient-text">beginning.</span></h2>
-                <p>
-                    We combine creativity, technology and strategy to create
-                    meaningful digital experiences. Every project starts with
-                    understanding the people behind the business.
-                </p>
+$('asend').onclick=async()=>{
+  try{
+    rv=rv||new RecaptchaVerifier(auth,'asend',{size:'invisible'});
+    conf=await signInWithPhoneNumber(auth,$('aph').value.trim(),rv);
+    $('acodebox').style.display='flex';say('Code sent. Enter it below.',false);
+  }catch(x){fail(x);try{rv.clear()}catch(_){}rv=null}
+};
+$('averify').onclick=async()=>{try{await conf.confirm($('acode').value.trim());dlg.close()}catch(x){fail(x)}};
 
-                <ul class="about-list">
-                    <li><span>✓</span> User-focused design</li>
-                    <li><span>✓</span> Mobile-friendly development</li>
-                    <li><span>✓</span> Performance-minded approach</li>
-                </ul>
-
-                <a href="#contact" class="btn btn-primary">Work With Us ↗</a>
-            </div>
-        </section>
-
-        <!-- Contact -->
-        <section class="section contact" id="contact">
-            <div class="contact-panel reveal">
-                <p class="eyebrow">HAVE A PROJECT IN MIND?</p>
-                <h2>Let's make something <span class="gradient-text">great.</span></h2>
-                <p>Tell us a little about your project. Let's start a conversation.</p>
-
-                <form id="contactForm">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="name">Your name</label>
-                            <input type="text" id="name" name="name"
-                                   placeholder="Enter your name" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email address</label>
-                            <input type="email" id="email" name="email"
-                                   placeholder="you@example.com" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message">Project details</label>
-                        <textarea id="message" name="message" rows="4"
-                                  placeholder="Tell us about your idea..."
-                                  required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">
-                        Send Message ↗
-                    </button>
-
-                    <p id="formStatus" class="form-status" role="status"
-                       aria-live="polite"></p>
-                </form>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <a href="#home" class="logo">NOVA<span>.</span></a>
-        <p>© <span id="year"></span> NOVA Digital Agency. Demo project.</p>
-        <a href="#home">Back to top ↑</a>
-    </footer>
-
+onAuthStateChanged(auth,u=>{
+  HK='vf-hist'+(u?'-'+u.uid:'');
+  $('abtn').textContent=u?'Sign out':'Sign in';
+  const n=u?(u.displayName||u.phoneNumber||u.email||''):'';
+  $('who').textContent=n?'Hi, '+n.split(' ')[0]:'';
+  if(u&&u.displayName){$('nm').value=u.displayName;$('pn').value=u.displayName}
+});
+</script>
 </body>
 </html>
